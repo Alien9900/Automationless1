@@ -20,8 +20,8 @@ try:
         time.sleep(1)  # небольшая задержка для наглядности
 
     # Собираем список кнопок "Delete"
-    firefox_delete_buttons = chrome.find_elements(By.XPATH, "//button[text()='Delete']")
-    chrome_delete_buttons = firefox.find_elements(By.XPATH, "//button[text()='Delete']")
+    firefox_delete_buttons = firefox.find_elements(By.XPATH, "//button[text()='Delete']")
+    chrome_delete_buttons = chrome.find_elements(By.XPATH, "//button[text()='Delete']")
 
     # Выводим на экран размер списка
     print(f"Количество кнопок 'Delete': {len(chrome_delete_buttons)}")
