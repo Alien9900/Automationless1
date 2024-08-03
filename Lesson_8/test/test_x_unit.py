@@ -1,6 +1,7 @@
 import pytest
 import requests 
-from Lesson_8.Pages.Employee import Employer, Company
+from Lesson_8.Pages.Employee import Employer
+from Lesson_8.Pages.Company import Company
 
 employer = Employer()
 company = Company()
@@ -13,20 +14,26 @@ def test_auth(get_token):
     #Токен обозначается в строковом формате
     assert isinstance(token, str)
 
+
 def test_getcompany_id():
-    company_id = company.last_company_id()
-    assert company_id is not None
-    assert str(company_id).isdigit()
+    name = 'HW8'
+    descr = 'Skypro'
+    result = company.create_company(name, descr)
+    comp_id = result["id"]
+    
+    new_comp = company.get_company(comp_id)
+    assert new_comp["id"]
+
 
 def test_add_employer(get_token):
     token = str(get_token)
-    comp_id = company.last_company_id()
+    company_id = company.last_company_id()
     body_employer = {
         'id': 0,
         'firstName': 'Ivan',
         'lastname': 'Petrov',
         'middlename': 'string',
-        'companyId': comp_id,
+        'companyId': company_id,
         'email': 'test@mail.ru',
         'url': 'string',
         'phone': 'string',
@@ -86,29 +93,20 @@ def test_get_employer():
 
 ##Проверяем, обязательно поле 'ID компании' в запросе на получение списка работников без ID компании
 
-
 def test_get_list_miss_comId():
-    try:
+    with pytest.raises(TypeError, match='get_list\\(\\) missing 1 required positional argument: \'company_id\''):
         employer.get_list()
-    except TypeError as e:
-        assert str(e) == 'Employer.get_list() missing I required positional argument: "company_id"'
 
-
-##Проверяем, обязательное поле 'ID компании' в запросе на получение списка работников не валидное ID компании
-
+# Проверяем, что обязательное поле 'ID компании' в запросе на получение информации о сотрудниках не валидно
 def test_get_list_employers_inval_compId():
-    try:
-        employer.get_info()
-    except TypeError as e:
-        assert str(e) ==  'Employer.get_info() missing I required positional argument: "company_id"'
+    with pytest.raises(TypeError, match='get_list\\(\\) missing 1 required positional argument: \'company_id\''):
+        employer.get_list()
 
-##Проверяем обязательное поле 'ID сотрудника' в запросе на получение инф-ии о сотруднике без ID
-
+# Проверяем обязательное поле 'ID сотрудника' в запросе на получение информации о сотруднике без ID
 def test_get_info_missing_employerId():
-    try:
+    with pytest.raises(TypeError, match='get_info\\(\\) missing 1 required positional argument: \'employee_id\''):
         employer.get_info()
-    except TypeError as e:
-        assert str(e) ==  'Employer.get_info() missing I required positional argument: "employee_id"'
+
 
 ##Проверяем изменение информации о сотруднике 
 def test_change_employer_info(get_token):
@@ -144,12 +142,7 @@ def test_change_employer_info(get_token):
     ##Проверяем что почта изменилась
     assert (employer_changed.json()["email"]) == body_change_employer.get("email")
 
-
-###Проверяем обязательное поле "ID сотрудника", "token", "body" в запросе на изменение инф-ии о сотруднике без этих данных
-
-
+# Проверяем обязательные поля 'employee_id', 'token' и 'body' в запросе на изменение информации о сотруднике
 def test_employers_missing_id_and_token():
-    try:
+    with pytest.raises(TypeError, match="change_info\(\) missing 3 required positional arguments: 'employee_id', 'token', and 'body'"):
         employer.change_info()
-    except TypeError as e:
-        assert str(e) == "Employer.get_change() missing 3 required positional argument: 'employee_id','token', and 'body'"

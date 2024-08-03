@@ -4,25 +4,6 @@ from Lesson_8.constants import X_client_URL
 
 path = '/employee'
 
-class Company:
-    def __init__(self, url = X_client_URL):
-        self.url = url
-    
-    #Создание компании
-    def create(self, token: str, body: json):
-        headers = {'x-client-token': token}
-        response = requests.post(
-            self.url + '/company', headers=headers, params=body)
-        return response.json()
-    
-    #Последнее создание компании
-    def last_company_id(self):
-        active_params = {'active': 'true' }
-        response = requests.get(
-            self.url + '/company', params=active_params)
-        return response.json()[-1]['id']
-    
-
 class Employer:
     def __init__(self, url= X_client_URL):
         self.url = url
