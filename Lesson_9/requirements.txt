@@ -1,0 +1,6 @@
+psycopg2==2.9.9
+SQLAlchemy==2.0.32
+webdriver-manager==4.0.1
+greenlet==3.0.3
+pytest==8.2.2
+typing_extensions==4.12.2
