@@ -9,9 +9,10 @@ db = DataBase("postgresql+psycopg2://x_clients_db_3fmx_user:mzoTw2Vp4Ox4NQH0XKN3
 
 def test_get_list_employers():
     # Создание компании
-    db.create_company("Vladislav QA", "SkyPro")
+    db.create_company("Vladislav_QA", "SkyPro")
     # Получение id последней созданной компании
     max_id = db.last_company_id()
+    print(max_id)
     # Добавление сотрудника в компанию
     db.create_employer(max_id, "Vladislav", "Ivashin", 80029396386)
     # Получение списка сотрудников последней компании
@@ -38,7 +39,7 @@ def test_add_new_employer():
     response = (api.get_list(max_id))[0]
     employer_id = response['id']
     #Cравнение id компании 
-    assert response['companyID'] == max_id
+    assert response['companyId'] == max_id
     #Сравнение имени сотрудника с заданной ранее
     assert response['firstName'] == "Vladislav"
     #Удостоверяемся что статус сотрудника == true
@@ -70,7 +71,7 @@ def test_update_user_info():
     employer_id = db.get_employer_id(max_id)
     db.update_employer_info("Alien", employer_id)
     get_api_info = (api.get_info(employer_id)).json()
-    assert get_api_info["FirstName"] == "Alien"
+    assert get_api_info["firstName"] == "Alien"
     assert get_api_info["lastName"] ==  "Ivashin"
     assert get_api_info["isActive"] == True
     db.delete_employer(employer_id)

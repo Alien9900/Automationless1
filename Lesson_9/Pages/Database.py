@@ -2,15 +2,15 @@ from sqlalchemy import create_engine, text
 
 class DataBase:
     query = {
-        'create_company': text('insert into company (name, description) values (:name, :decription)'),
+        'create_company': text('insert into company (name, description) values (:name, :description)'),
         'max_company_id': text('select MAX(id) from company'),
         'delete_company': text('delete from company where id = :company_id'),
         'list_SELECT': text('select * from employee where company_id = :id'),
         'item_SELECT': text('select * from employee where company_id = :c_id and id = :e_id'),
         'maxID_SELECT': text('select MAX(id) from employee where company_id = :c_id'),
         'item_DELETE': text('delete from employee where id = :id_delete'),
-        'item_UPDATE': text('update employee set first_name = :new name where id = :employer_id'),
-        'item_INSERT': text('insert into employee(company_id, first_name, last name, phone) values(:id, :name, :surname, :phone_num)')
+        'item_UPDATE': text('update employee set first_name = :new_name where id = :employer_id'),
+        'item_INSERT': text('insert into employee(company_id, first_name, last_name, phone) values(:id, :name, :surname, :phone_num)')
     }
 
     def __init__(self, engine) -> None:
@@ -24,9 +24,9 @@ class DataBase:
         )
         connection.commit()
         connection.close()
-    print("[INFO] Company created successfully")
+        print("[INFO] Company created successfully")
 
-    def delete(self, company_id, int):
+    def delete(self, company_id: int):
         with self.db.connect() as connection:
            connection.execute(self.query['delete_company'], parameters=dict(company_id=company_id))
            connection.commit()

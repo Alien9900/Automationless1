@@ -16,7 +16,7 @@ class Employer:
         return response.json()
 
     #Добавление сотрудника
-    def add_new(self, token: str, body : json):
+    def add_new(self, token: str, body: json):
         hdrs = {'x-client-token': token}
         resp = requests.post(self.url + '/employee', headers=hdrs, json=body)
         return resp.json()
